@@ -1,2 +1,2 @@
-# kittnkhy.github.io
-promo page
+# GitHub Pages
+
