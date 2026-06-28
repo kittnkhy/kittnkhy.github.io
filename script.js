@@ -22,32 +22,61 @@ const items = [
 const social = "https://throne.com/bebexoxo";
 let i = 0;
 
-const d = 1000; 
+const d = 1000;
+const canVibrate = typeof navigator.vibrate === "function";
+
+// 100 ms vibrazione, 100 ms pausa
+const vibrationPattern = [100, 100];
+
+let vibrationInterval = null;
+
+function startVibration() {
+    if (!canVibrate) return;
+
+    const pattern = [100, 100];
+
+    navigator.vibrate(pattern);
+
+    vibrationInterval = setInterval(() => {
+        navigator.vibrate(pattern);
+    }, 200);
+}
+
+function stopVibration() {
+    if (!canVibrate) return;
+
+    clearInterval(vibrationInterval);
+    navigator.vibrate(0);
+}
+
+startVibration();
 
 function show() {
     let e = items[i];
     let el = document.createElement(e.type === "image" ? "img" : "video");
-    
+
     el.src = e.src;
-    
+
     if (e.type === "video") {
         el.autoplay = true;
         el.muted = true;
         el.playsInline = true;
         el.loop = true;
     }
-    
+
     let s = document.getElementById("slide");
     s.innerHTML = "";
     s.appendChild(el);
-    
+
     text.textContent = e.text;
-    
+
     i++;
-    
-    
+
     if (i >= items.length) {
-        setTimeout(() => location.href = social, d);
+        setTimeout(() => {
+            stopVibration();
+            location.href = social;
+        }, d);
     } else {
         setTimeout(show, d);
     }
